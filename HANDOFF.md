@@ -73,6 +73,17 @@ cp .env.example .env
 
 転職サポートのフォームはCloudflare Pages Functionsの `/api/contact` からResend APIを利用し、`sugita@kameya-hldgs.com` に送信します。Cloudflareの「変数とシークレット」で `RESEND_API_KEY` を暗号化して登録してください。必要に応じて、送信元を `CONTACT_FROM_EMAIL`、送信先を `CONTACT_TO_EMAIL` で変更できます。
 
+## 5.2 施設管理画面
+
+- 管理URL：`/admin`
+- ログイン：`sugita@kameya-hldgs.com` に届くワンタイムコード
+- 保存先：Cloudflare D1バインディング `RIDGELINE_DB`
+- シークレット：`ADMIN_SESSION_SECRET`（Cloudflareで暗号化）
+- 公開API：`GET /api/hospitals` は公開中の施設だけを返す
+- 管理API：`/api/admin/*` は署名済みHttpOnlyセッションを要求する
+
+D1の接続後、最初のアクセス時に必要なテーブルと既存50施設が自動作成されます。
+
 ## 6. データと画像に関する注意
 
 - 病院名、住所、採用条件、URL、募集状況は変更される可能性があります。公開利用前に各病院の公式サイトと公的情報で再確認してください。
