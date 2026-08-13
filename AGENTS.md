@@ -8,7 +8,7 @@ When implementing from a selected generated mock, treat that image as the source
 
 Cloudflare deployment was explicitly authorized by the owner on 2026-08-14. Keep repository access limited to `sugita-spec/ridgeline`; do not expose secrets or unrelated repositories.
 
-The career-support contact form targets `sugita@kameya-hldgs.com`. Until a server-side mail provider is configured, compose the inquiry through the visitor's mail application with `mailto:` and do not claim that the message was sent automatically.
+The career-support contact form targets `sugita@kameya-hldgs.com` and submits through the Cloudflare Pages Function at `/api/contact`, which sends with Resend. Keep `RESEND_API_KEY` only in Cloudflare encrypted secrets; never commit it. Until that secret is configured, the endpoint must fail closed rather than claim successful delivery.
 
 The hospital-search filter bar contains only location and facility type; do not restore the information-verification filter.
 

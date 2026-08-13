@@ -69,6 +69,10 @@ cp .env.example .env
 
 認証情報をソースコード、会話、Git、ZIPへ書き込まないでください。未設定の場合、画面は「連携準備中」と表示します。
 
+## 5.1 問い合わせの自動送信
+
+転職サポートのフォームはCloudflare Pages Functionsの `/api/contact` からResend APIを利用し、`sugita@kameya-hldgs.com` に送信します。Cloudflareの「変数とシークレット」で `RESEND_API_KEY` を暗号化して登録してください。必要に応じて、送信元を `CONTACT_FROM_EMAIL`、送信先を `CONTACT_TO_EMAIL` で変更できます。
+
 ## 6. データと画像に関する注意
 
 - 病院名、住所、採用条件、URL、募集状況は変更される可能性があります。公開利用前に各病院の公式サイトと公的情報で再確認してください。
