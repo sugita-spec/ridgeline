@@ -8,6 +8,8 @@ When implementing from a selected generated mock, treat that image as the source
 
 Cloudflare deployment was explicitly authorized by the owner on 2026-08-14. Keep repository access limited to `sugita-spec/ridgeline`; do not expose secrets or unrelated repositories.
 
+The career-support contact form targets `sugita@kameya-hldgs.com`. Until a server-side mail provider is configured, compose the inquiry through the visitor's mail application with `mailto:` and do not claim that the message was sent automatically.
+
 The hospital-search filter bar contains only location and facility type; do not restore the information-verification filter.
 
 Use the supplied nurse bust portrait as Ridgeline's image model in the career-support hero, keeping the treatment natural and professional.
