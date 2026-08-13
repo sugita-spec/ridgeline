@@ -1358,6 +1358,13 @@ a:focus-visible {
   gap: 18px;
 }
 
+.career-form-destination {
+  margin: 0;
+  color: var(--blue-dark);
+  font-size: 13px;
+  font-weight: 700;
+}
+
 .career-form label { display: grid; gap: 7px; }
 .career-form label > span { color: var(--ink); font-size: 12px; font-weight: 700; }
 

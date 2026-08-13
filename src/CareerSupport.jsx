@@ -7,6 +7,8 @@ import {
   ShieldCheck,
 } from "@phosphor-icons/react";
 
+const CONTACT_EMAIL = "sugita@kameya-hldgs.com";
+
 const questions = [
   {
     title: "どの資格をお持ちですか？",
@@ -110,6 +112,21 @@ function RegistrationForm({ answers, onRestart }) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const subject = `[Ridgeline] ${formData.get("subject")}`;
+    const body = [
+      "Ridgeline 転職サポートへのお問い合わせ",
+      "",
+      ...summary.map(([label, value]) => `${label}: ${value}`),
+      "",
+      `氏名: ${formData.get("name")}`,
+      `メールアドレス: ${formData.get("email")}`,
+      "",
+      "メッセージ:",
+      formData.get("message") || "（未入力）",
+    ].join("\n");
+
+    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     setSubmitted(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -119,9 +136,9 @@ function RegistrationForm({ answers, onRestart }) {
       <section className="career-complete" aria-live="polite">
         <CheckCircle size={58} weight="fill" />
         <p className="service-eyebrow">REGISTRATION COMPLETE</p>
-        <h2>登録内容を受け付けました</h2>
-        <p>ご入力ありがとうございました。担当者からの連絡をお待ちください。</p>
-        <p className="demo-notice">現在は表示確認用のため、入力内容は外部へ送信していません。</p>
+        <h2>メール作成画面を開きました</h2>
+        <p>内容をご確認のうえ、メールアプリから送信してください。</p>
+        <p className="demo-notice">送信先：{CONTACT_EMAIL}</p>
         <button type="button" onClick={onRestart}>はじめから入力する</button>
       </section>
     );
@@ -148,6 +165,7 @@ function RegistrationForm({ answers, onRestart }) {
       </dl>
 
       <form className="career-form" aria-label="コンタクトフォーム" onSubmit={handleSubmit}>
+        <p className="career-form-destination">送信先：{CONTACT_EMAIL}</p>
         <label>
           <span>氏名</span>
           <input name="name" autoComplete="name" required />
@@ -164,7 +182,7 @@ function RegistrationForm({ answers, onRestart }) {
           <span>メッセージ本文 (任意)</span>
           <textarea name="message" rows="8" />
         </label>
-        <button type="submit">登録</button>
+        <button type="submit">メールを作成する</button>
       </form>
     </section>
   );
