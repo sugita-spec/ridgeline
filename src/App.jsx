@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   ArrowSquareOut,
   BookmarkSimple,
@@ -211,6 +211,7 @@ function HospitalCard({ hospital, active, favorite, onActivate, onFavorite, onDe
 }
 
 function ResultsPanel({
+  hospitals: hospitalData,
   activeId,
   favorites,
   appliedFilters,
@@ -221,7 +222,7 @@ function ResultsPanel({
   onDetail,
 }) {
   const visibleHospitals = useMemo(() => {
-    const filteredHospitals = hospitals.filter((hospital) => {
+    const filteredHospitals = hospitalData.filter((hospital) => {
       if (appliedFilters.area !== "神奈川県" && hospital.region !== appliedFilters.area) return false;
       if (appliedFilters.facility !== "すべて" && hospital.type !== appliedFilters.facility) return false;
       return true;
@@ -234,14 +235,14 @@ function ResultsPanel({
       return filteredHospitals.toSorted((a, b) => a.area.localeCompare(b.area, "ja"));
     }
     return filteredHospitals;
-  }, [appliedFilters, sort]);
+  }, [appliedFilters, hospitalData, sort]);
 
   return (
     <section className="results-panel" id="results">
       <div className="results-heading">
         <div>
           <h1>神奈川県の病院・看護師採用情報</h1>
-          <p><strong>{hospitals.length}</strong> 施設を登録済み</p>
+          <p><strong>{hospitalData.length}</strong> 施設を登録済み</p>
         </div>
       </div>
       <div className="sort-row">
@@ -253,7 +254,7 @@ function ResultsPanel({
             <option>地域順</option>
           </select>
         </label>
-        <span>{visibleHospitals.length}件 / 全{hospitals.length}施設</span>
+        <span>{visibleHospitals.length}件 / 全{hospitalData.length}施設</span>
       </div>
       <div className="hospital-list">
         {visibleHospitals.map((hospital) => (
@@ -279,8 +280,8 @@ function ResultsPanel({
   );
 }
 
-function MapPanel({ activeId, focused }) {
-  const activeHospital = hospitals.find((hospital) => hospital.id === activeId);
+function MapPanel({ hospitals: hospitalData, activeId, focused }) {
+  const activeHospital = hospitalData.find((hospital) => hospital.id === activeId);
   if (!activeHospital) return null;
 
   const mapQuery = encodeURIComponent(`${activeHospital.name} ${activeHospital.area}`);
@@ -367,6 +368,7 @@ function DetailDialog({ hospital, onClose, onFavorite, favorite }) {
 }
 
 export function App() {
+  const [hospitalData, setHospitalData] = useState(hospitals);
   const [view, setView] = useState("directory");
   const [filtersValue, setFiltersValue] = useState({
     area: "神奈川県",
@@ -383,6 +385,19 @@ export function App() {
   const [desktopView, setDesktopView] = useState("list");
   const [message, setMessage] = useState("");
   const [detail, setDetail] = useState(null);
+
+  useEffect(() => {
+    let active = true;
+    fetch("/api/hospitals")
+      .then((response) => response.ok ? response.json() : Promise.reject())
+      .then((data) => {
+        if (active && data.configured && Array.isArray(data.hospitals) && data.hospitals.length) {
+          setHospitalData(data.hospitals);
+        }
+      })
+      .catch(() => {});
+    return () => { active = false; };
+  }, []);
 
   const flash = (text) => {
     setMessage(text);
@@ -443,12 +458,13 @@ export function App() {
       <div className="mobile-results-head">
         <div>
           <h1>神奈川県の病院・看護師採用情報</h1>
-          <p><strong>{hospitals.length}</strong> 施設を登録済み</p>
+          <p><strong>{hospitalData.length}</strong> 施設を登録済み</p>
         </div>
         <ViewToggle view={mobileView} onChange={setMobileView} />
       </div>
       <main className={`content-grid mobile-${mobileView}`}>
         <ResultsPanel
+          hospitals={hospitalData}
           activeId={activeId}
           favorites={favorites}
           appliedFilters={appliedFilters}
@@ -459,6 +475,7 @@ export function App() {
           onDetail={setDetail}
         />
         <MapPanel
+          hospitals={hospitalData}
           activeId={activeId}
           focused={desktopView === "map"}
         />
