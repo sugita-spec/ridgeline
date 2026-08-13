@@ -10,7 +10,7 @@ Ridgelineは、神奈川県の病院と看護師採用情報を探すための�
 - 主な画面：病院一覧、地域・施設形態フィルター、リスト／地図表示、病院詳細、転職サポート
 - 地図：各施設のGoogleマップ検索リンクを使用
 - 求人：ハローワーク求人情報提供APIの接続準備済み
-- 公開方針：ローカル専用。所有者の明示的な許可なしに公開・デプロイしないこと
+- 公開方針：所有者が2026年8月14日にCloudflareへの公開を承認済み。GitHub連携は `sugita-spec/ridgeline` のみに限定する
 
 ## 2. 重要なデザイン・仕様決定
 
@@ -40,6 +40,12 @@ npm run dev
 ```bash
 npm run build
 npm run test:sites
+```
+
+Cloudflareへデプロイする場合：
+
+```bash
+npm run deploy:cloudflare
 ```
 
 ## 4. 主なファイル
@@ -85,4 +91,3 @@ cp .env.example .env
 - `.git/`：この端末のGit履歴・設定
 - `work/`：作業用ファイル
 - `.env` などの秘密情報
-

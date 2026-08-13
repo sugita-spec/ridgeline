@@ -6,7 +6,7 @@ Before making substantial visual changes, use the Product Design plugin's `get-c
 
 When implementing from a selected generated mock, treat that image as the source of truth for layout, component anatomy, density, spacing, color, typography, visible content, and hierarchy.
 
-Keep this prototype local-only. Do not publish or deploy it unless the user explicitly changes this decision.
+Cloudflare deployment was explicitly authorized by the owner on 2026-08-14. Keep repository access limited to `sugita-spec/ridgeline`; do not expose secrets or unrelated repositories.
 
 The hospital-search filter bar contains only location and facility type; do not restore the information-verification filter.
 
