@@ -7,8 +7,6 @@ import {
   ShieldCheck,
 } from "@phosphor-icons/react";
 
-const CONTACT_EMAIL = "sugita@kameya-hldgs.com";
-
 const questions = [
   {
     title: "どの資格をお持ちですか？",
@@ -104,31 +102,48 @@ function ChoiceStep({ step, answer, onAnswer, onBack, onNext }) {
 
 function RegistrationForm({ answers, onRestart }) {
   const [submitted, setSubmitted] = useState(false);
+  const [submissionStatus, setSubmissionStatus] = useState("idle");
+  const [submissionError, setSubmissionError] = useState("");
+  const [startedAt] = useState(() => Date.now());
   const summary = useMemo(() => [
     ["保有資格", answers[0]],
     ["希望の働き方", answers[1]],
     ["転職希望時期", answers[2]],
   ], [answers]);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const subject = `[Ridgeline] ${formData.get("subject")}`;
-    const body = [
-      "Ridgeline 転職サポートへのお問い合わせ",
-      "",
-      ...summary.map(([label, value]) => `${label}: ${value}`),
-      "",
-      `氏名: ${formData.get("name")}`,
-      `メールアドレス: ${formData.get("email")}`,
-      "",
-      "メッセージ:",
-      formData.get("message") || "（未入力）",
-    ].join("\n");
+    if (submissionStatus === "sending") return;
 
-    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    setSubmitted(true);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    setSubmissionStatus("sending");
+    setSubmissionError("");
+    const formData = new FormData(event.currentTarget);
+    const payload = {
+      name: formData.get("name"),
+      email: formData.get("email"),
+      subject: formData.get("subject"),
+      message: formData.get("message"),
+      website: formData.get("website"),
+      answers: Object.fromEntries(summary),
+      startedAt,
+      submissionId: crypto.randomUUID(),
+    };
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "content-type": "application/json", accept: "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data.message || "送信できませんでした。");
+
+      setSubmitted(true);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch (error) {
+      setSubmissionStatus("error");
+      setSubmissionError(error.message || "送信できませんでした。時間をおいて再度お試しください。");
+    }
   };
 
   if (submitted) {
@@ -136,9 +151,8 @@ function RegistrationForm({ answers, onRestart }) {
       <section className="career-complete" aria-live="polite">
         <CheckCircle size={58} weight="fill" />
         <p className="service-eyebrow">REGISTRATION COMPLETE</p>
-        <h2>メール作成画面を開きました</h2>
-        <p>内容をご確認のうえ、メールアプリから送信してください。</p>
-        <p className="demo-notice">送信先：{CONTACT_EMAIL}</p>
+        <h2>お問い合わせを送信しました</h2>
+        <p>ご入力ありがとうございました。担当者からの連絡をお待ちください。</p>
         <button type="button" onClick={onRestart}>はじめから入力する</button>
       </section>
     );
@@ -165,7 +179,6 @@ function RegistrationForm({ answers, onRestart }) {
       </dl>
 
       <form className="career-form" aria-label="コンタクトフォーム" onSubmit={handleSubmit}>
-        <p className="career-form-destination">送信先：{CONTACT_EMAIL}</p>
         <label>
           <span>氏名</span>
           <input name="name" autoComplete="name" required />
@@ -182,7 +195,14 @@ function RegistrationForm({ answers, onRestart }) {
           <span>メッセージ本文 (任意)</span>
           <textarea name="message" rows="8" />
         </label>
-        <button type="submit">メールを作成する</button>
+        <label className="career-honeypot" aria-hidden="true">
+          <span>ウェブサイト</span>
+          <input name="website" tabIndex="-1" autoComplete="off" />
+        </label>
+        {submissionError ? <p className="career-form-error" role="alert">{submissionError}</p> : null}
+        <button type="submit" disabled={submissionStatus === "sending"}>
+          {submissionStatus === "sending" ? "送信中…" : "送信する"}
+        </button>
       </form>
     </section>
   );

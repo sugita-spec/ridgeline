@@ -1358,13 +1358,6 @@ a:focus-visible {
   gap: 18px;
 }
 
-.career-form-destination {
-  margin: 0;
-  color: var(--blue-dark);
-  font-size: 13px;
-  font-weight: 700;
-}
-
 .career-form label { display: grid; gap: 7px; }
 .career-form label > span { color: var(--ink); font-size: 12px; font-weight: 700; }
 
@@ -1394,6 +1387,9 @@ a:focus-visible {
 }
 
 .career-form button:hover { background: var(--blue-dark); }
+.career-form button:disabled { cursor: wait; opacity: 0.72; }
+.career-honeypot { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.career-form-error { margin: 0; color: #b42318; font-size: 13px; font-weight: 700; }
 
 .career-complete {
   padding: 64px 32px;
