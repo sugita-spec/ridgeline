@@ -18,6 +18,7 @@ import {
   X,
 } from "@phosphor-icons/react";
 import { filters, hospitals } from "./data.js";
+import { DEFAULT_SEARCH_FILTERS, matchesHospitalFilters } from "./searchFilters.js";
 import { CareerSupport } from "./CareerSupport.jsx";
 import { HelloWorkJobs } from "./HelloWorkJobs.jsx";
 
@@ -223,9 +224,7 @@ function ResultsPanel({
 }) {
   const visibleHospitals = useMemo(() => {
     const filteredHospitals = hospitalData.filter((hospital) => {
-      if (appliedFilters.area !== "神奈川県" && hospital.region !== appliedFilters.area) return false;
-      if (appliedFilters.facility !== "すべて" && hospital.type !== appliedFilters.facility) return false;
-      return true;
+      return matchesHospitalFilters(hospital, appliedFilters);
     });
 
     if (sort === "施設名順") {
@@ -370,10 +369,7 @@ function DetailDialog({ hospital, onClose, onFavorite, favorite }) {
 export function App() {
   const [hospitalData, setHospitalData] = useState(hospitals);
   const [view, setView] = useState("directory");
-  const [filtersValue, setFiltersValue] = useState({
-    area: "神奈川県",
-    facility: "すべて",
-  });
+  const [filtersValue, setFiltersValue] = useState(DEFAULT_SEARCH_FILTERS);
   const [appliedFilters, setAppliedFilters] = useState(filtersValue);
   const [openFilter, setOpenFilter] = useState(null);
   const [activeId, setActiveId] = useState(1);
