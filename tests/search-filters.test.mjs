@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { FACILITY_FILTER_OPTIONS, FACILITY_TYPES } from "../src/facilityTypes.js";
 import { DEFAULT_SEARCH_FILTERS, matchesHospitalFilters } from "../src/searchFilters.js";
 
 const hospital = {
@@ -31,4 +32,22 @@ test("rejects facilities that do not satisfy selected conditions", () => {
   assert.equal(matchesHospitalFilters(hospital, { ...DEFAULT_SEARCH_FILTERS, workStyle: "3交替" }), false);
   assert.equal(matchesHospitalFilters(hospital, { ...DEFAULT_SEARCH_FILTERS, preference: "寮あり" }), false);
   assert.equal(matchesHospitalFilters({ ...hospital, holidays: "2026年7月確認" }, { ...DEFAULT_SEARCH_FILTERS, preference: "年間休日120日以上" }), false);
+});
+
+test("offers nurse workplace types in public search and administration", () => {
+  assert.equal(FACILITY_FILTER_OPTIONS[0], "すべて");
+  assert.deepEqual(FACILITY_FILTER_OPTIONS.slice(1), FACILITY_TYPES);
+  assert.equal(new Set(FACILITY_TYPES).size, FACILITY_TYPES.length);
+  assert.equal(FACILITY_TYPES.includes("訪問看護ステーション"), true);
+  assert.equal(FACILITY_TYPES.includes("介護老人保健施設"), true);
+  assert.equal(FACILITY_TYPES.includes("特別養護老人ホーム"), true);
+  assert.equal(FACILITY_TYPES.includes("企業・産業保健"), true);
+});
+
+test("matches a home-visit nursing station by facility type", () => {
+  const homeVisitNursing = { ...hospital, name: "Ridgeline訪問看護ステーション", type: "訪問看護ステーション" };
+  assert.equal(
+    matchesHospitalFilters(homeVisitNursing, { ...DEFAULT_SEARCH_FILTERS, facility: "訪問看護ステーション" }),
+    true,
+  );
 });
