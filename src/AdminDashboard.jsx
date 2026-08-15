@@ -12,10 +12,10 @@ import {
   Trash,
   X,
 } from "@phosphor-icons/react";
+import { FACILITY_TYPES } from "./facilityTypes.js";
 
 const ADMIN_EMAIL = "sugita@kameya-hldgs.com";
 const REGIONS = ["横浜市", "川崎市", "相模原市", "横須賀・三浦", "湘南エリア", "県央・県西"];
-const TYPES = ["総合病院", "公立病院", "大学病院", "専門病院", "クリニック", "その他"];
 
 const emptyHospital = {
   name: "",
@@ -163,7 +163,7 @@ function HospitalForm({ hospital, onClose, onSaved }) {
             <label className="admin-field admin-field-wide"><span>施設名 <b>必須</b></span><input value={form.name} onChange={(event) => update("name", event.target.value)} required /></label>
             <label className="admin-field admin-field-wide"><span>所在地 <b>必須</b></span><input value={form.area} onChange={(event) => update("area", event.target.value)} placeholder="横浜市〇〇区…" required /></label>
             <label className="admin-field"><span>エリア <b>必須</b></span><select value={form.region} onChange={(event) => update("region", event.target.value)}>{REGIONS.map((region) => <option key={region}>{region}</option>)}</select></label>
-            <label className="admin-field"><span>施設形態</span><select value={form.type} onChange={(event) => update("type", event.target.value)}>{TYPES.map((type) => <option key={type}>{type}</option>)}</select></label>
+            <label className="admin-field"><span>施設形態</span><select value={form.type} onChange={(event) => update("type", event.target.value)}>{FACILITY_TYPES.map((type) => <option key={type}>{type}</option>)}</select></label>
             <label className="admin-field admin-field-wide"><span>交通アクセス</span><input value={form.station} onChange={(event) => update("station", event.target.value)} placeholder="〇〇駅から徒歩5分" /></label>
             <label className="admin-field admin-field-wide"><span>特徴タグ</span><input value={form.tags} onChange={(event) => update("tags", event.target.value)} placeholder="災害拠点病院、公式情報確認済み" /></label>
           </div>
@@ -302,4 +302,3 @@ export function AdminDashboard() {
     </div>
   );
 }
-
