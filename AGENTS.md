@@ -10,7 +10,7 @@ Cloudflare deployment was explicitly authorized by the owner on 2026-08-14. Keep
 
 The career-support contact form targets `sugita@kameya-hldgs.com` and submits through the Cloudflare Pages Function at `/api/contact`, which sends with Resend. Keep `RESEND_API_KEY` only in Cloudflare encrypted secrets; never commit it. Until that secret is configured, the endpoint must fail closed rather than claim successful delivery.
 
-The hospital-search filter bar contains location, facility type, work style, and preference filters; do not restore the information-verification filter. Work style and preference filters must match the managed facility fields (tags, salary, shift, holidays, and access) rather than inventing unsupported facility facts.
+The facility-search filter bar contains location, facility type, work style, and preference filters; do not restore the information-verification filter. Facility types cover hospitals, clinics, home-visit nursing, elder-care facilities, checkup centers, schools/nurseries, and occupational health, using the shared `src/facilityTypes.js` option source for both public search and administration. Work style and preference filters must match the managed facility fields (tags, salary, shift, holidays, and access) rather than inventing unsupported facility facts.
 
 Use the supplied nurse bust portrait as Ridgeline's image model in the career-support hero, keeping the treatment natural and professional.
 
