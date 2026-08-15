@@ -32,15 +32,15 @@ function Header({ favoriteCount, saved, onSave, menuOpen, onMenu, view, onNaviga
         <button
           className={`header-action support-link ${view === "career" ? "is-active" : ""}`}
           type="button"
-          aria-label={view === "career" ? "病院を探す" : "転職サポート"}
+          aria-label={view === "career" ? "施設を探す" : "転職サポート"}
           onClick={() => onNavigate(view === "career" ? "directory" : "career")}
         >
           {view === "career" ? <Buildings size={23} weight="duotone" /> : <ChatCircleText size={23} weight="duotone" />}
-          <span>{view === "career" ? "病院を探す" : "転職サポート"}</span>
+          <span>{view === "career" ? "施設を探す" : "転職サポート"}</span>
         </button>
         {view === "directory" ? (
           <>
-            <button className="header-action" type="button" aria-label="気になる病院">
+            <button className="header-action" type="button" aria-label="気になる施設">
               <Heart size={23} weight={favoriteCount ? "fill" : "regular"} />
               <span>気になる</span>
               {favoriteCount > 0 ? <b>{favoriteCount}</b> : null}
@@ -64,7 +64,7 @@ function Header({ favoriteCount, saved, onSave, menuOpen, onMenu, view, onNaviga
       </nav>
       {menuOpen ? (
         <div className="menu-popover">
-          <button type="button" onClick={() => onNavigate("directory")}>病院を探す</button>
+          <button type="button" onClick={() => onNavigate("directory")}>施設を探す</button>
           <button type="button" onClick={() => onNavigate("career")}>転職サポート</button>
           {view === "directory" ? <button type="button" onClick={onSave}>検索条件を保存</button> : null}
           <a href="#guide">転職ガイド</a>
@@ -240,7 +240,7 @@ function ResultsPanel({
     <section className="results-panel" id="results">
       <div className="results-heading">
         <div>
-          <h1>神奈川県の病院・看護師採用情報</h1>
+          <h1>神奈川県の看護師求人・施設情報</h1>
           <p><strong>{hospitalData.length}</strong> 施設を登録済み</p>
         </div>
       </div>
@@ -274,7 +274,7 @@ function ResultsPanel({
           </div>
         ) : null}
       </div>
-      <p className="data-note">所在地・交通・公式リンクはGoogleマップと各病院公式サイトで照合しています。</p>
+      <p className="data-note">所在地・交通・公式リンクはGoogleマップと各施設の公式サイトで照合しています。</p>
     </section>
   );
 }
@@ -287,10 +287,10 @@ function MapPanel({ hospitals: hospitalData, activeId, focused }) {
   const embedUrl = `https://www.google.com/maps?q=${mapQuery}&output=embed`;
 
   return (
-    <section className={`map-panel google-map-panel ${focused ? "is-focused" : ""}`} aria-label="Googleマップで病院の場所を確認">
+    <section className={`map-panel google-map-panel ${focused ? "is-focused" : ""}`} aria-label="Googleマップで施設の場所を確認">
       <div className="google-map-toolbar">
         <div>
-          <span>選択中の病院</span>
+          <span>選択中の施設</span>
           <strong>{activeHospital.name}</strong>
         </div>
         <a href={activeHospital.mapsUrl} target="_blank" rel="noreferrer">
@@ -306,7 +306,7 @@ function MapPanel({ hospitals: hospitalData, activeId, focused }) {
         allowFullScreen
         referrerPolicy="no-referrer-when-downgrade"
       />
-      <p className="google-map-note">病院リストを選択すると、地図の表示先が切り替わります。</p>
+      <p className="google-map-note">施設リストを選択すると、地図の表示先が切り替わります。</p>
     </section>
   );
 }
@@ -453,7 +453,7 @@ export function App() {
       />
       <div className="mobile-results-head">
         <div>
-          <h1>神奈川県の病院・看護師採用情報</h1>
+          <h1>神奈川県の看護師求人・施設情報</h1>
           <p><strong>{hospitalData.length}</strong> 施設を登録済み</p>
         </div>
         <ViewToggle view={mobileView} onChange={setMobileView} />
