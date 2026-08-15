@@ -1,3 +1,5 @@
+import { FACILITY_FILTER_OPTIONS } from "./facilityTypes.js";
+
 const verifiedHospitals = [
   {
     name: "横浜市立市民病院",
@@ -445,7 +447,7 @@ export const filters = [
   {
     key: "facility",
     label: "施設形態",
-    options: ["すべて", "総合病院", "公立病院", "大学病院", "専門病院"],
+    options: FACILITY_FILTER_OPTIONS,
   },
   {
     key: "workStyle",
